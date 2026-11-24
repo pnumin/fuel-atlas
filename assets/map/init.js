@@ -1,0 +1,1 @@
+window.FUEL_GEO={type:"FeatureCollection",features:[]};

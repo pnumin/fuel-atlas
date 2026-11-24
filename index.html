@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="인터넷 없이 지역별 주유소 자료를 추출하고 지도에서 주유가격을 확인합니다.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline' blob:; worker-src blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<title>지역 주유정보 · 오프라인</title><link rel="stylesheet" href="assets/styles.css"></head>
+<body data-page="home">
+<header class="topbar"><a class="brand" href="#home"><span class="brand-mark">F</span><span>지역 주유정보<small>FUEL ATLAS</small></span></a><span class="offline"><span class="status-dot"></span>오프라인 전용 · 로컬 처리</span></header>
+<div class="app-shell">
+<aside class="sidebar"><div class="sidebar-label">작업 공간</div><nav aria-label="주요 메뉴">
+<button data-route="home" class="nav-button active" aria-current="page"><span>00</span>메인</button>
+<button data-route="extract" class="nav-button"><span>01</span>지역별 자료 추출</button>
+<button data-route="map" class="nav-button"><span>02</span>지도·주유가격 조회</button></nav>
+<div class="sidebar-bottom"><strong>내 PC 안에서만</strong><p>입력한 파일은 외부로<br>전송되지 않습니다.</p><span class="version">VERSION 1.0 · OFFLINE</span></div></aside>
+<main>
+<section id="home">
+<div class="home-heading">
+<div class="hero-copy"><p class="eyebrow">우리 지역 주유정보 서비스</p><h1><span>필요할 때,</span> <span>필요한 지역의</span><br><span>주유정보를 한눈에</span></h1><p class="lead">전국 자료에서 우리 지역만 골라 저장하고,<br>주유소별 모든 날짜의 가격을 확인하세요.</p><button class="button hero-cta" data-route="map">지도에서 가격 보기 <span aria-hidden="true">→</span></button><p class="hero-note">인터넷 연결 없이 내 PC에서 안전하게</p></div>
+<div class="hero-art"><img src="assets/fuel-hero.png" width="480" height="480" alt="입체 주유기와 위치 핀 일러스트"></div>
+</div>
+<div class="home-section-heading"><h2>복잡한 자료도 간편하게<br>필요한 기능을 선택하세요</h2><p>주유소 자료와 주유가격 CSV만 준비하면 됩니다.</p></div>
+<div class="menu-grid">
+<button class="menu-card" data-route="extract"><span class="card-top"><span class="step-no">01 / DATA EXPORT</span><span class="card-arrow">↗</span></span><span class="menu-title">지역별 자료 추출</span><span class="menu-description">전국 자료에서 필요한 시도·시군구를 선택해<br>주유소와 가격 CSV를 각각 저장합니다.</span><span class="card-bottom">CSV 입력 <span>→</span> 지역 선택 <span>→</span> 파일 저장</span></button>
+<button class="menu-card map-card" data-route="map"><span class="card-top"><span class="step-no">02 / MAP EXPLORER</span><span class="card-arrow">↗</span></span><span class="menu-title">지도·주유가격 조회</span><span class="menu-description">주유소 위치를 지도에 표시하고<br>날짜와 유종별 판매가격을 확인합니다.</span><span class="card-bottom">CSV 입력 <span>→</span> 지도 선택 <span>→</span> 가격 조회</span></button>
+</div>
+<section class="home-benefits" aria-labelledby="benefit-title"><div class="home-section-heading"><h2 id="benefit-title">인터넷이 없어도 괜찮아요<br>주유정보는 내 PC에서</h2><p>지도부터 가격 조회까지, 필요한 자료를 한 번에 살펴보세요.</p></div><div class="benefit-grid"><div class="benefit-card"><span class="benefit-tag">지역별 자료</span><h3>필요한 지역만 쏙</h3><p>시도·시군구를 선택해<br>두 종류의 CSV로 저장하세요.</p><span class="benefit-foot">원본 열과 값 그대로</span></div><div class="benefit-card featured"><span class="benefit-tag">모든 날짜의 가격</span><h3>한눈에 보는 가격 이력</h3><p>주유소를 선택하면<br>모든 일자와 네 유종이 한 표에.</p><span class="benefit-foot">휘발유 · 경유 · 고급휘발유 · 실내등유</span></div><div class="benefit-card"><span class="benefit-tag">오프라인 지도</span><h3>연결 없이도 찾기 쉽게</h3><p>내장된 행정동 경계 지도에서<br>주유소 위치를 확인하세요.</p><span class="benefit-foot">로그인 · API 키 필요 없음</span></div></div></section>
+<section class="home-guide" aria-labelledby="guide-title"><div class="home-section-heading"><h2 id="guide-title">믿을 수 있는 자료를<br>간편하게 확인하는 방법</h2></div><div class="guide-layout"><div class="guide-steps"><div><span class="guide-number">01</span><h3>두 CSV 파일을 준비하세요</h3><p>전국 자료와 지역별로 추출한 자료를 모두 사용할 수 있습니다.</p></div><div><span class="guide-number">02</span><h3>확인할 지역을 선택하세요</h3><p>시도와 시군구를 고르면 해당 지역의 자료가 표시됩니다.</p></div><div><span class="guide-number">03</span><h3>저장하거나 지도에서 살펴보세요</h3><p>CSV를 저장하거나 주유소를 눌러 일자별 가격을 확인하세요.</p></div></div><div class="guide-ready"><span class="mini-label">준비할 자료</span><h3>파일 두 개면 시작할 수 있어요</h3><div><span>주유소 기본정보</span><strong>주유소명 · 주소 · 위도 · 경도</strong></div><div><span>주유가격</span><strong>주유소 번호 · 날짜 · 유종별 가격</strong></div><p>입력 파일은 외부로 전송되지 않습니다.</p><button class="button primary" data-route="extract">지역별 자료 추출 시작하기</button></div></div></section>
+</section>
+
+<footer class="app-footer"><span>FUEL ATLAS / 지역 주유정보</span><span id="geo-status">내장 지도 준비 중…</span></footer>
+</main></div>
+<script defer src="assets/home.js"></script>
+</body></html>

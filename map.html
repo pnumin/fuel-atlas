@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="인터넷 없이 지역별 주유소 자료를 추출하고 지도에서 주유가격을 확인합니다.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline' blob:; worker-src blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<title>지역 주유정보 · 오프라인</title><link rel="stylesheet" href="assets/styles.css"></head>
+<body data-page="map">
+<header class="topbar"><a class="brand" href="#home"><span class="brand-mark">F</span><span>지역 주유정보<small>FUEL ATLAS</small></span></a><span class="offline"><span class="status-dot"></span>오프라인 전용 · 로컬 처리</span></header>
+<div class="app-shell">
+<aside class="sidebar"><div class="sidebar-label">작업 공간</div><nav aria-label="주요 메뉴">
+<button data-route="home" class="nav-button"><span>00</span>메인</button>
+<button data-route="extract" class="nav-button"><span>01</span>지역별 자료 추출</button>
+<button data-route="map" class="nav-button active" aria-current="page"><span>02</span>지도·주유가격 조회</button></nav>
+<div class="sidebar-bottom"><strong>내 PC 안에서만</strong><p>입력한 파일은 외부로<br>전송되지 않습니다.</p><span class="version">VERSION 1.0 · OFFLINE</span></div></aside>
+<main>
+
+<section id="workspace">
+<div class="page-heading"><div><p class="eyebrow" id="page-kicker"></p><h1 id="page-title"></h1><p id="page-description" class="muted"></p></div><button class="button secondary" data-route="home">← 메인으로</button></div>
+<div class="upload-grid">
+<div class="upload-box" id="base-drop"><label class="file-label" for="base-file"><span class="file-icon">CSV</span><span><strong>주유소 기본정보</strong><small id="base-summary">클릭 또는 CSV 파일 끌어놓기</small></span><span class="file-action">파일 선택</span></label><input type="file" accept=".csv,text/csv" id="base-file"><div class="file-options"><label for="base-encoding">인코딩</label><select id="base-encoding"><option value="auto">자동 감지</option><option value="utf-8">UTF-8</option><option value="euc-kr">CP949 / EUC-KR</option></select><span class="hint">14개 필수 열</span></div></div>
+<div class="upload-box" id="price-drop"><label class="file-label" for="price-file"><span class="file-icon">CSV</span><span><strong>주유가격</strong><small id="price-summary">클릭 또는 CSV 파일 끌어놓기</small></span><span class="file-action">파일 선택</span></label><input type="file" accept=".csv,text/csv" id="price-file"><div class="file-options"><label for="price-encoding">인코딩</label><select id="price-encoding"><option value="auto">자동 감지</option><option value="utf-8">UTF-8</option><option value="euc-kr">CP949 / EUC-KR</option></select><span class="hint">11개 필수 열</span></div></div>
+</div>
+<div class="notice-row"><p id="notice" class="notice" role="status" aria-live="polite">두 CSV를 선택한 다음 지역을 지정하세요. 가격 표시 단위: 원/L (원본 제공처의 단위 확인 필요)</p><progress id="progress" hidden aria-label="파일 처리 중"></progress><button id="cancel-load" class="button secondary" hidden>처리 취소</button></div>
+<div class="filter-bar panel"><label class="field">시도<select id="sido"><option value="">시도를 선택하세요</option></select></label><label class="field">시군구<select id="sgg"><option value="">전체</option></select></label><div class="region-note" id="region-info">지역을 선택하면 자료 범위를 확인할 수 있습니다.</div></div>
+<details class="mapping-panel"><summary>지역 표기 대응 설정 · 지도와 지역명이 다를 때</summary><p class="hint">시도 단위로 같은 범위인 경우에만 대응하세요. 원본 CSV 값은 변경되지 않습니다.</p><div class="mapping-fields"><label class="field">원본 시도명<select id="mapping-from"></select></label><label class="field">대응할 시도<select id="mapping-to"></select></label><button class="button secondary" id="mapping-apply">대응 적용</button><button class="button secondary" id="mapping-reset">전체 초기화</button></div><p id="mapping-info" class="hint">별칭표에 없는 개편 지역은 자동 통합하지 않습니다.</p></details>
+<div id="metrics" class="metrics"></div>
+
+<section id="map-view">
+<div class="map-filters"><label class="field">조회 날짜<select id="date"></select></label><label class="field">유종<select id="fuel"><option>휘발유</option><option>경유</option><option>고급휘발유</option><option>실내등유</option></select></label><label class="field search-field">주유소 검색<input id="query" type="search" placeholder="선택 지역에서 주유소명 검색"></label><label class="field">정렬<select id="sort"><option value="name">이름순</option><option value="price">가격 낮은순</option></select></label></div>
+<div class="map-layout">
+<section class="panel map-panel"><div class="map-toolbar"><strong id="map-title">지역 지도</strong><button class="button compact secondary" id="fit-map">지역 전체 보기</button></div><div id="map" role="region" aria-label="주유소 행정경계 지도"></div><div class="map-caption"><span><i class="legend-dot"></i> 가격 표식 선택 · 묶음은 확대</span><span>행정동 경계 · 도로/위성영상 미포함</span></div><p id="map-warning" class="map-warning"></p></section>
+<section class="panel list-panel"><div class="list-heading"><h2>주유소 목록</h2><span id="list-count" class="pill">0곳</span></div><div id="station-list"></div><button id="load-more" class="button secondary" hidden>더 보기</button><div id="station-detail" class="detail"><div class="empty">지도 또는 목록에서<br>주유소를 선택하세요.</div></div></section>
+</div>
+<section class="panel price-history" id="station-history" tabindex="-1" aria-label="선택 주유소 일자별 전체 가격"><div class="empty">주유소를 선택하면 모든 날짜의 가격이 표시됩니다.</div></section>
+<details class="panel audit-panel"><summary>자료 연결 및 미표시 내역 <span id="audit-summary"></span></summary><p class="hint">이름·주소·지역이 유일하게 일치하는 자료만 자동 연결합니다. 주유소 선택 후 상세에서 수동 연결할 수 있습니다.</p><div id="audit-stats" class="audit-stats"></div><div id="audit-list"></div></details>
+</section>
+</section>
+<footer class="app-footer"><span>FUEL ATLAS / 지역 주유정보</span><span id="geo-status">내장 지도 준비 중…</span></footer>
+</main></div>
+<script defer src="assets/geo-index.js"></script>
+<script defer src="assets/map/init.js"></script>
+<script defer src="assets/map/boundary-01.js"></script>
+<script defer src="assets/map/boundary-02.js"></script>
+<script defer src="assets/map/boundary-03.js"></script>
+<script defer src="assets/map/boundary-04.js"></script>
+<script defer src="assets/map/boundary-05.js"></script>
+<script defer src="assets/map/boundary-06.js"></script>
+<script defer src="assets/map/boundary-07.js"></script>
+<script defer src="assets/map/boundary-08.js"></script>
+<script defer src="assets/map/boundary-09.js"></script>
+<script defer src="assets/map/boundary-10.js"></script>
+<script defer src="assets/map/boundary-11.js"></script>
+<script defer src="assets/map/boundary-12.js"></script>
+<script defer src="assets/map/boundary-13.js"></script>
+<script defer src="assets/map/boundary-14.js"></script>
+<script defer src="assets/map/boundary-15.js"></script>
+<script defer src="assets/worker-code.js"></script>
+<script defer src="assets/workspace.js"></script>
+</body></html>
